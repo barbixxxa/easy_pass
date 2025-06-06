@@ -38,6 +38,15 @@
 <body>
   <div class="container text-center">
     <h2 class="mb-4">Gerador de Senhas</h2>
+    <!-- Radio buttons para seleção do tamanho -->
+    <div class="mb-3">
+      <label class="form-check-inline"><input type="radio" name="tamanho" value="14" checked> 14</label>
+      <label class="form-check-inline"><input type="radio" name="tamanho" value="16"> 16</label>
+      <label class="form-check-inline"><input type="radio" name="tamanho" value="20"> 20</label>
+      <label class="form-check-inline"><input type="radio" name="tamanho" value="24"> 24</label>
+      <label class="form-check-inline"><input type="radio" name="tamanho" value="32"> 32</label>
+      <label class="form-check-inline"><input type="radio" name="tamanho" value="64"> 64</label>
+    </div>
     <div id="senha" class="senha mb-3"></div>
     <div class="d-flex gap-2 justify-content-center">
       <button id="btnNova" class="btn btn-primary">Nova Senha</button>
@@ -47,29 +56,29 @@
   </div>
 
   <script>
-    const senhaTamanho = 14;
+    let senhaTamanho = 14;
 
-function gerarSenha() {
-  const letrasMaiusculas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const letrasMinusculas = 'abcdefghijklmnopqrstuvwxyz';
-  const numeros = '0123456789';
-  const especiais = '@#*';
-  let senha = '';
-  // Garante os requisitos mínimos
-  senha += letrasMaiusculas[Math.floor(Math.random() * letrasMaiusculas.length)];
-  senha += letrasMinusculas[Math.floor(Math.random() * letrasMinusculas.length)];
-  for(let i=0; i<2; i++)
-    senha += numeros[Math.floor(Math.random() * numeros.length)];
-  for(let i=0; i<2; i++)
-    senha += especiais[Math.floor(Math.random() * especiais.length)];
-  // Preenche o restante com caracteres aleatórios do conjunto permitido
-  const restantes = senhaTamanho - senha.length;
-  const chars = letrasMaiusculas + letrasMinusculas + numeros + especiais;
-  for(let i=0; i<restantes; i++)
-    senha += chars[Math.floor(Math.random() * chars.length)];
-  // Embaralha a senha para não ficar previsível
-  return senha.split('').sort(() => 0.5 - Math.random()).join('');
-}
+    function gerarSenha() {
+      const letrasMaiusculas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const letrasMinusculas = 'abcdefghijklmnopqrstuvwxyz';
+      const numeros = '0123456789';
+      const especiais = '@#*';
+      let senha = '';
+      // Garante os requisitos mínimos
+      senha += letrasMaiusculas[Math.floor(Math.random() * letrasMaiusculas.length)];
+      senha += letrasMinusculas[Math.floor(Math.random() * letrasMinusculas.length)];
+      for(let i=0; i<2; i++)
+        senha += numeros[Math.floor(Math.random() * numeros.length)];
+      for(let i=0; i<2; i++)
+        senha += especiais[Math.floor(Math.random() * especiais.length)];
+      // Preenche o restante com caracteres aleatórios do conjunto permitido
+      const restantes = senhaTamanho - senha.length;
+      const chars = letrasMaiusculas + letrasMinusculas + numeros + especiais;
+      for(let i=0; i<restantes; i++)
+        senha += chars[Math.floor(Math.random() * chars.length)];
+      // Embaralha a senha para não ficar previsível
+      return senha.split('').sort(() => 0.5 - Math.random()).join('');
+    }
 
     function mostrarSenha(s) {
       document.getElementById('senha').textContent = s;
@@ -100,6 +109,14 @@ function gerarSenha() {
     document.getElementById('btnCopia').addEventListener('click', () => {
       const senha = document.getElementById('senha').textContent;
       copiarSenha(senha);
+    });
+
+    // Radios de tamanho de senha
+    document.querySelectorAll('input[name="tamanho"]').forEach((radio) => {
+      radio.addEventListener('change', function() {
+        senhaTamanho = Number(this.value);
+        novaSenha(false); // Gera nova senha ao trocar o tamanho, mas não copia automaticamente
+      });
     });
 
     // Gera senha ao carregar e copia para o clipboard
