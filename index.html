@@ -50,14 +50,27 @@
     const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#*';
     const senhaTamanho = 14;
 
-    function gerarSenha() {
-      let senha = '';
-      for (let i = 0; i < senhaTamanho; i++) {
-        const idx = Math.floor(Math.random() * chars.length);
-        senha += chars[idx];
-      }
-      return senha;
-    }
+function gerarSenha() {
+  const letrasMaiusculas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const letrasMinusculas = 'abcdefghijklmnopqrstuvwxyz';
+  const numeros = '0123456789';
+  const especiais = '@#*';
+  let senha = '';
+  // Garante os requisitos mínimos
+  senha += letrasMaiusculas[Math.floor(Math.random() * letrasMaiusculas.length)];
+  senha += letrasMinusculas[Math.floor(Math.random() * letrasMinusculas.length)];
+  for(let i=0; i<2; i++)
+    senha += numeros[Math.floor(Math.random() * numeros.length)];
+  for(let i=0; i<2; i++)
+    senha += especiais[Math.floor(Math.random() * especiais.length)];
+  // Preenche o restante com caracteres aleatórios do conjunto permitido
+  const restantes = senhaTamanho - senha.length;
+  const chars = letrasMaiusculas + letrasMinusculas + numeros + especiais;
+  for(let i=0; i<restantes; i++)
+    senha += chars[Math.floor(Math.random() * chars.length)];
+  // Embaralha a senha para não ficar previsível
+  return senha.split('').sort(() => 0.5 - Math.random()).join('');
+}
 
     function mostrarSenha(s) {
       document.getElementById('senha').textContent = s;
