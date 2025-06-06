@@ -109,5 +109,52 @@
       for(let i=0; i<restantes; i++)
         senha += chars[Math.floor(Math.random() * chars.length)];
       // Embaralha a senha para não ficar previsível
-      return senha.split('').sort(() => 0.5 - Math.random()).join*
-
+      return senha.split('').sort(() => 0.5 - Math.random()).join('');
+    }
+
+    function mostrarSenha(s) {
+      document.getElementById('senha').textContent = s;
+    }
+
+    function copiarSenha(s) {
+      navigator.clipboard.writeText(s).then(() => {
+        mostrarMsg('Senha copiada para o clipboard!');
+      });
+    }
+
+    function mostrarMsg(msg) {
+      const msgDiv = document.getElementById('msg');
+      msgDiv.textContent = msg;
+      setTimeout(() => { msgDiv.textContent = '' }, 2000);
+    }
+
+    function novaSenha() {
+      const senha = gerarSenha();
+      mostrarSenha(senha);
+      copiarSenha(senha); // Sempre copia ao gerar
+    }
+
+    document.getElementById('btnNova').addEventListener('click', () => {
+      novaSenha();
+    });
+
+    document.getElementById('btnCopia').addEventListener('click', () => {
+      const senha = document.getElementById('senha').textContent;
+      copiarSenha(senha);
+    });
+
+    // Radios de tamanho de senha
+    document.querySelectorAll('input[name="tamanho"]').forEach((radio) => {
+      radio.addEventListener('change', function() {
+        senhaTamanho = Number(this.value);
+        novaSenha(); // Sempre gera e copia ao trocar
+      });
+    });
+
+    // Gera senha ao carregar e copia para o clipboard
+    window.onload = () => {
+      novaSenha();
+    };
+  </script>
+</body>
+</html>
